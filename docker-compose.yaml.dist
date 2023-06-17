@@ -1,0 +1,50 @@
+version: '3.5'
+
+networks:
+  keyword_popularity:
+    name: keyword_popularity
+  local:
+    name: local
+
+services:
+
+  php:
+    container_name: "${PROJECT_NAME}_php"
+    build:
+      context: .docker-config/php
+      args:
+        - DOCKER_UID=${DOCKER_UID:-1000}
+        - DOCKER_GID=${DOCKER_GID:-1000}
+    working_dir: /app
+    volumes:
+      - '.:/app'
+      - './.docker-config/php/conf.d/php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro'
+    networks:
+      - keyword_popularity
+
+  nginx:
+    container_name: "${PROJECT_NAME}_nginx"
+    build:
+      context: .docker-config/nginx
+    volumes:
+      - '.:/app'
+      - './.docker-config/nginx/conf.d/site.conf:/etc/nginx/conf.d/site.conf:ro'
+      - './.docker-config/nginx/conf.d/nginx.conf:/etc/nginx/conf.d/docker-nginx.conf:ro'
+    ports:
+      - 8000:80
+    networks:
+      - keyword_popularity
+      - local
+
+  db:
+    container_name: "${PROJECT_NAME}_db"
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: d0cker!
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - 3310:3306
+    networks:
+      - keyword_popularity
