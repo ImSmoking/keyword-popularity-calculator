@@ -24,12 +24,13 @@ services:
 
   nginx:
     container_name: "${PROJECT_NAME}_nginx"
-    build:
-      context: .docker-config/nginx
+    image: nginx:latest
     volumes:
       - '.:/app'
       - './.docker-config/nginx/conf.d/site.conf:/etc/nginx/conf.d/site.conf:ro'
       - './.docker-config/nginx/conf.d/nginx.conf:/etc/nginx/conf.d/docker-nginx.conf:ro'
+    environment:
+        WORK_DIR: '/app/'
     ports:
       - 8000:80
     networks:

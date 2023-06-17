@@ -5,18 +5,18 @@ default:
 	@echo 'Documentation for Symfony Skeleton just commands:'
 	@echo '------------------------------------------------------'
 	@echo '  up             : boot up containers'
-	@echo '  stop           : stop containers'
+	@echo '  down           : stop containers'
 	@echo '  enter-php      : enter PHP docker container'
 	@echo '  enter-db       : enter MySql DB docker container'
 	@echo '  enter-nginx    : enter Nginx docker container'
 	@echo '  install        : install and configure the whole skeleton project'
-	@echo '  wipe           : remove everything and reset to factory settings'
+	@echo '  teardown       : remove everything and reset to factory settings'
 	@echo '------------------------------------------------------'
 
 up:
     docker-compose up -d
 
-stop:
+down:
     docker-compose stop
 
 enter-php:
@@ -38,7 +38,7 @@ install:
     docker-compose up --detach --force-recreate --build --remove-orphans
     docker-compose exec php /bin/bash /home/appuser/setup.sh
 
-wipe:
+teardown:
     #!/usr/bin/env bash
     echo "This will delete everything and restore the project to its factory settings."
     echo -n "Are you sure you want to do this? [y/N]: " && read ans && if [[ $ans != y ]]; then exit; fi
