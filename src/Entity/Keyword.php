@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\KeywordRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use DateTimeImmutable;
 
 #[ORM\Entity(repositoryClass: KeywordRepository::class)]
 #[ORM\UniqueConstraint(name: 'keyword__name_source', columns: ['name', 'source'])]
@@ -21,14 +22,14 @@ class Keyword
     #[ORM\Column(length: 45)]
     private ?string $source = null;
 
-    #[ORM\Column(options: ["default" => 0])]
-    private ?int $rocksCount = 0;
+    #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in a positive context"])]
+    private ?int $hitsRocks = 0;
 
-    #[ORM\Column(options: ["default" => 0])]
-    private ?int $sucksCount = 0;
+    #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in a negative context"])]
+    private ?int $hitsSucks = 0;
 
-    #[ORM\Column(options: ["default" => 0])]
-    private ?int $totalCount = 0;
+    #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in both positive and negative context (check parameter)"])]
+    private ?int $hitsTotal = 0;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $score = null;
@@ -71,38 +72,38 @@ class Keyword
         return $this;
     }
 
-    public function getRocksCount(): ?int
+    public function getHitsRocks(): ?int
     {
-        return $this->rocksCount;
+        return $this->hitsRocks;
     }
 
-    public function setRocksCount(int $rocksCount): static
+    public function setHitsRocks(?int $hitsRocks): self
     {
-        $this->rocksCount = $rocksCount;
+        $this->hitsRocks = $hitsRocks;
 
         return $this;
     }
 
-    public function getSucksCount(): ?int
+    public function getHitsSucks(): ?int
     {
-        return $this->sucksCount;
+        return $this->hitsSucks;
     }
 
-    public function setSucksCount(int $sucksCount): static
+    public function setHitsSucks(?int $hitsSucks): self
     {
-        $this->sucksCount = $sucksCount;
+        $this->hitsSucks = $hitsSucks;
 
         return $this;
     }
 
-    public function getTotalCount(): ?int
+    public function getHitsTotal(): ?int
     {
-        return $this->totalCount;
+        return $this->hitsTotal;
     }
 
-    public function setTotalCount(int $totalCount): static
+    public function setHitsTotal(?int $hitsTotal): self
     {
-        $this->totalCount = $totalCount;
+        $this->hitsTotal = $hitsTotal;
 
         return $this;
     }
@@ -112,9 +113,11 @@ class Keyword
         return $this->score;
     }
 
-    public function setScore(?string $score): void
+    public function setScore(?string $score): self
     {
         $this->score = $score;
+
+        return $this;
     }
 
     public function getSearchedCount(): ?int
@@ -129,24 +132,24 @@ class Keyword
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(?DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 

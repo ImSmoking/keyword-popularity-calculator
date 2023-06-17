@@ -16,12 +16,12 @@ class TestKeywordScore extends TestCase
         $keywordScoreHandler = new KeywordScoreHandler();
 
         $keyword = (new Keyword())
-            ->setRocksCount(3306)
-            ->setSucksCount(6208);
+            ->setHitsRocks(3306)
+            ->setHitsSucks(6208);
 
         $keyword = $keywordScoreHandler->calculateScore($keyword);
 
         $this->assertSame('3.47', $keyword->getScore());
-        $this->assertSame(9514, $keyword->getTotalCount());
+        $this->assertSame(9514, $keyword->getHitsTotal());
     }
 }
