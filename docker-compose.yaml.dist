@@ -3,13 +3,11 @@ version: '3.5'
 networks:
   keyword_popularity:
     name: keyword_popularity
-  local:
-    name: local
 
 services:
 
   php:
-    container_name: "${PROJECT_NAME}_php"
+    container_name: "${PROJECT}_php"
     build:
       context: .docker-config/php
       args:
@@ -23,7 +21,7 @@ services:
       - keyword_popularity
 
   nginx:
-    container_name: "${PROJECT_NAME}_nginx"
+    container_name: "${PROJECT}_nginx"
     image: nginx:latest
     volumes:
       - '.:/app'
@@ -35,10 +33,9 @@ services:
       - 8000:80
     networks:
       - keyword_popularity
-      - local
 
   db:
-    container_name: "${PROJECT_NAME}_db"
+    container_name: "${PROJECT}_db"
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: d0cker!
@@ -49,3 +46,11 @@ services:
       - 3310:3306
     networks:
       - keyword_popularity
+
+  adminer:
+      image: adminer
+      container_name: '${PROJECT}_adminer'
+      ports:
+          - 8080:8080
+      networks:
+          - keyword_popularity
