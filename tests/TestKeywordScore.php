@@ -16,8 +16,8 @@ class TestKeywordScore extends TestCase
         $keywordScoreHandler = new KeywordScoreHandler();
 
         $keyword = (new Keyword())
-            ->setHitsRocks(3306)
-            ->setHitsSucks(6208);
+            ->setHitsPositive(3306)
+            ->setHitsNegative(6208);
 
         $keyword = $keywordScoreHandler->calculateScore($keyword);
 

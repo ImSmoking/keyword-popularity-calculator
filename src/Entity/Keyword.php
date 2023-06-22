@@ -18,6 +18,10 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups(['get_score'])]
+    private ?string $term = null;
+
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     #[Groups(['get_score'])]
     private ?string $score = null;
@@ -25,11 +29,12 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
     #[ORM\Column(length: 45)]
     #[Groups(['get_score'])]
     private ?string $source = null;
+
     #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in a positive context"])]
-    private ?int $hitsRocks = 0;
+    private ?int $hitsPositive = 0;
 
     #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in a negative context"])]
-    private ?int $hitsSucks = 0;
+    private ?int $hitsNegative = 0;
 
     #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in both positive and negative context (check parameter)"])]
     private ?int $hitsTotal = 0;
@@ -43,9 +48,6 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $term = null;
 
     public function getId(): ?int
     {
@@ -76,26 +78,26 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
         return $this;
     }
 
-    public function getHitsRocks(): ?int
+    public function getHitsPositive(): ?int
     {
-        return $this->hitsRocks;
+        return $this->hitsPositive;
     }
 
-    public function setHitsRocks(?int $hitsRocks): self
+    public function setHitsPositive(?int $hitsPositive): self
     {
-        $this->hitsRocks = $hitsRocks;
+        $this->hitsPositive = $hitsPositive;
 
         return $this;
     }
 
-    public function getHitsSucks(): ?int
+    public function getHitsNegative(): ?int
     {
-        return $this->hitsSucks;
+        return $this->hitsNegative;
     }
 
-    public function setHitsSucks(?int $hitsSucks): self
+    public function setHitsNegative(?int $hitsNegative): self
     {
-        $this->hitsSucks = $hitsSucks;
+        $this->hitsNegative = $hitsNegative;
 
         return $this;
     }

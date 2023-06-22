@@ -8,6 +8,8 @@ use App\Repository\KeywordRepository;
 
 abstract class AbstractKeywordProvider implements KeywordProviderInterface
 {
+    const POSITIVE_CONTEXT = 'rocks';
+    const NEGATIVE_CONTEXT = 'sucks';
     private KeywordRepository $keywordRepository;
     private KeywordScoreHandler $keywordScoreHandler;
 
@@ -31,8 +33,8 @@ abstract class AbstractKeywordProvider implements KeywordProviderInterface
         $keyword = (new Keyword())
             ->setTerm($term)
             ->setSource($this->getSource())
-            ->setHitsRocks($this->getHitsRocks($term))
-            ->setHitsSucks($this->getHitsSucks($term))
+            ->setHitsPositive($this->getHitsPositive($term))
+            ->setHitsNegative($this->getHitsNegative($term))
             ->setCreatedAt(new \DateTimeImmutable())
             ->increaseSearch();
 

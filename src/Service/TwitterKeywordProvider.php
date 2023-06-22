@@ -12,13 +12,13 @@ class TwitterKeywordProvider extends AbstractKeywordProvider
         return KeywordConstant::SOURCE_TWITTER;
     }
 
-    public function getHitsRocks(string $term): int
+    public function getHitsPositive(string $term): int
     {
-        return 4231;
+        return 4231; // dummy data
     }
 
-    public function getHitsSucks(string $term): int
+    public function getHitsNegative(string $term): int
     {
-        return 5988;
+        return 5988; // dummy data
     }
 }
