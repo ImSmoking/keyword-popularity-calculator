@@ -9,7 +9,7 @@ class TwitterKeywordProvider extends AbstractKeywordProvider
 
     public function getSource(): string
     {
-        return KeywordConstant::SOURCE_GITHUB;
+        return KeywordConstant::SOURCE_TWITTER;
     }
 
     public function getHitsRocks(string $term): int

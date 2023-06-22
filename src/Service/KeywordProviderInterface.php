@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-interface KeywordProvider
+interface KeywordProviderInterface
 {
 
     public function getSource(): string;

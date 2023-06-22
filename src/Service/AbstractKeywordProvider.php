@@ -6,7 +6,7 @@ use App\Entity\Keyword;
 use App\Handler\KeywordScoreHandler;
 use App\Repository\KeywordRepository;
 
-abstract class AbstractKeywordProvider implements KeywordProvider
+abstract class AbstractKeywordProvider implements KeywordProviderInterface
 {
     private KeywordRepository $keywordRepository;
     private KeywordScoreHandler $keywordScoreHandler;
