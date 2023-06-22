@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use App\Interface\ApiResponseObjectInterface;
 use App\Repository\KeywordRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: KeywordRepository::class)]
 #[ORM\UniqueConstraint(name: 'keyword__name_source', columns: ['name', 'source'])]
-class Keyword
+class Keyword implements EntityInterface, ApiResponseObjectInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,11 +19,16 @@ class Keyword
     private ?int $id = null;
 
     #[ORM\Column(length: 45)]
+    #[Groups(['get_score'])]
     private ?string $name = null;
+    
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
+    #[Groups(['get_score'])]
+    private ?string $score = null;
 
     #[ORM\Column(length: 45)]
+    #[Groups(['get_score'])]
     private ?string $source = null;
-
     #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in a positive context"])]
     private ?int $hitsRocks = 0;
 
@@ -31,10 +38,8 @@ class Keyword
     #[ORM\Column(options: ["default" => 0, "comment" => "Total number of times the keyword has appeared in both positive and negative context (check parameter)"])]
     private ?int $hitsTotal = 0;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
-    private ?string $score = null;
-
     #[ORM\Column(options: ["default" => 0])]
+    #[Groups(['get_score'])]
     private ?int $searchedCount = 0;
 
     #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
