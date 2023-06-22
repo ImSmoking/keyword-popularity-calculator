@@ -21,9 +21,9 @@ class KeywordController extends ApiController
     {
         try {
             $keywordProvider = $keywordProviderContainer->get($source);
-
+            $keyword = $keywordProvider->getKeyword($term);
             $response = $this->getJsonResponse(
-                $keywordProvider->getKeyword($term),
+                $keyword,
                 ['groups' => 'get_score']
             );
         } catch (NotFoundExceptionInterface) {

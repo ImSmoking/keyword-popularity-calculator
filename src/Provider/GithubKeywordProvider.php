@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Provider;
 
 use App\Constant\KeywordConstant;
 use App\Handler\KeywordScoreHandler;

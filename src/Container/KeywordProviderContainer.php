@@ -2,13 +2,14 @@
 
 namespace App\Container;
 
-use App\Service\GithubKeywordProvider;
-use App\Service\KeywordProviderInterface;
-use App\Service\TwitterKeywordProvider;
-use Psr\Container\ContainerInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use App\Provider\AbstractKeywordProvider;
+use App\Provider\GithubKeywordProvider;
+use App\Provider\KeywordProviderInterface;
+use App\Provider\TwitterKeywordProvider;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class KeywordProviderContainer implements ServiceSubscriberInterface
 {
@@ -44,7 +45,7 @@ class KeywordProviderContainer implements ServiceSubscriberInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function get(string $providerType): KeywordProviderInterface
+    public function get(string $providerType): AbstractKeywordProvider
     {
         return $this->locator->get($providerType);
     }
