@@ -17,7 +17,7 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    
+
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     #[Groups(['get_score'])]
     private ?string $score = null;
@@ -132,6 +132,13 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
     public function setSearchedCount(int $searchedCount): static
     {
         $this->searchedCount = $searchedCount;
+
+        return $this;
+    }
+
+    public function increaseSearch(): self
+    {
+        $this->searchedCount += 1;
 
         return $this;
     }

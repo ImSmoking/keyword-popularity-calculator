@@ -3,20 +3,17 @@
 namespace App\Controller\Api\v1;
 
 use App\Controller\Api\ApiController;
+use App\Service\GithubKeywordProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/keyword', name: 'keyword_')]
 class KeywordController extends ApiController
 {
-    #[Route('/score/{keyword}', name: 'score', methods: ['GET'])]
-    public function scoreAction(): JsonResponse
+    #[Route('/score/{term}', name: 'score', methods: ['GET'])]
+    public function scoreAction(string $term, GithubKeywordProvider $gitHubKeywordScoreProvider): JsonResponse
     {
-        return $this->getJsonResponse([
-            "name" => "php",
-            "score" => "3.47",
-            "source" => "github",
-            "searched_count" => 1
-        ], ['groups' => 'get_score']);
+        $keyword = $gitHubKeywordScoreProvider->getKeyword($term);
+        return $this->getJsonResponse($keyword, ['groups' => 'get_score']);
     }
 }

@@ -39,6 +39,17 @@ class KeywordRepository extends ServiceEntityRepository
         }
     }
 
+    public function findOneByTermAndSource(string $term, string $source): ?Keyword
+    {
+        return $this->createQueryBuilder('k')
+            ->andWhere('k.term = :term')
+            ->andWhere('k.source = :source')
+            ->setParameter('term', $term)
+            ->setParameter('source', $source)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Keyword[] Returns an array of Keyword objects
 //     */
