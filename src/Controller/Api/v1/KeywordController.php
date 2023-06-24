@@ -9,6 +9,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/keyword', name: 'keyword_')]
 class KeywordController extends ApiController
@@ -17,7 +18,12 @@ class KeywordController extends ApiController
      * @throws ContainerExceptionInterface
      */
     #[Route('/score/{source}/{term}', name: 'score', methods: ['GET'])]
-    public function scoreAction(string $source, string $term, KeywordProviderContainer $keywordProviderContainer): JsonResponse
+    public function scoreAction(
+        string                   $source,
+        string                   $term,
+        KeywordProviderContainer $keywordProviderContainer,
+        TranslatorInterface      $translator
+    ): JsonResponse
     {
         try {
             $keywordProvider = $keywordProviderContainer->get($source);
@@ -29,12 +35,13 @@ class KeywordController extends ApiController
         } catch (NotFoundExceptionInterface) {
 
             $availableSourceOptions = KeywordProviderContainer::getAvailableKeywordProviders(true);
-            $message = "'{$source}' is not a valid 'source' parameter option! Valid options are " . $availableSourceOptions.'.';
 
-            $response = $this->getJsonResponse(
-                ['message' => $message],
-                [],
-                Response::HTTP_BAD_REQUEST
+            $message = $translator->trans('exception.invalid_source', [
+                '%source%' => $source,
+                '%valid_sources%' => $availableSourceOptions
+            ], 'exceptions');
+
+            $response = $this->getJsonResponse(['message' => $message], [], Response::HTTP_BAD_REQUEST
             );
         }
 
