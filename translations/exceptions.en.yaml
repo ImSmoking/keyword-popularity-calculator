@@ -1,1 +1,1 @@
-exception.invalid_source: " '%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"
+exception.invalid_source: "'%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"
