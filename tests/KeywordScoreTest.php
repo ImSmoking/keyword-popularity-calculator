@@ -6,7 +6,7 @@ use App\Entity\Keyword;
 use App\Handler\KeywordScoreHandler;
 use PHPUnit\Framework\TestCase;
 
-class TestKeywordScore extends TestCase
+class KeywordScoreTest extends TestCase
 {
     /**
      * Testing the logic for calculating Keyword score.
