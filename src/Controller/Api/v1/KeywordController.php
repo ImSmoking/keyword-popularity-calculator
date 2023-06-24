@@ -78,4 +78,24 @@ class KeywordController extends ApiController
 
         return $response;
     }
+
+    #[Route('/sources', name: 'sources', methods: ['GET'])]
+    #[OA\Get(summary: "Get available keyword sources", tags: ['Keyword'])]
+    #[OA\Response(
+        response: 200,
+        description: 'List out available sources',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(
+                    property: 'data',
+                    example: ["source_01", "source_02"]
+                )
+            ]
+        )
+    )]
+    public function sourcesAction(): JsonResponse
+    {
+        $availableSources = KeywordProviderContainer::getAvailableKeywordProviders();
+        return $this->getJsonResponse($availableSources);
+    }
 }
