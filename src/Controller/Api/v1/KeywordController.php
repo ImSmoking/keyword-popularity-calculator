@@ -63,6 +63,7 @@ class KeywordController extends ApiController
                 $keyword,
                 ['groups' => 'get_score']
             );
+
         } catch (NotFoundExceptionInterface) {
 
             $availableSourceOptions = KeywordProviderContainer::getAvailableKeywordProviders(true);
@@ -72,8 +73,7 @@ class KeywordController extends ApiController
                 '%valid_sources%' => $availableSourceOptions
             ], 'exceptions');
 
-            $response = $this->getJsonResponse(['message' => $message], [], Response::HTTP_BAD_REQUEST
-            );
+            $response = $this->getJsonResponse(['message' => $message], [], Response::HTTP_BAD_REQUEST);
         }
 
         return $response;
@@ -83,7 +83,7 @@ class KeywordController extends ApiController
     #[OA\Get(summary: "Get available keyword sources", tags: ['Keyword'])]
     #[OA\Response(
         response: 200,
-        description: 'List out available sources',
+        description: 'List out available keyword sources',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
