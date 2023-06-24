@@ -30,18 +30,22 @@ abstract class AbstractKeywordProvider implements KeywordProviderInterface
             return $keyword;
         }
 
-        $keyword = (new Keyword())
-            ->setTerm($term)
-            ->setSource($this->getSource())
-            ->setHitsPositive($this->getHitsPositive($term))
-            ->setHitsNegative($this->getHitsNegative($term))
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->increaseSearch();
-
+        $keyword = $this->prepareKeyword($term);
         $keyword = $this->keywordScoreHandler->calculateScore($keyword);
 
         $this->keywordRepository->save($keyword, true);
 
         return $keyword;
+    }
+
+    private function prepareKeyword(string $term): Keyword
+    {
+        return (new Keyword())
+            ->setTerm($term)
+            ->setSource($this->getSource())
+            ->setHitsPositive($this->getHitsPositive($term))
+            ->setHitsNegative($this->getHitsNegative($term))
+            ->setCreatedAt()
+            ->increaseSearch();
     }
 }

@@ -150,8 +150,11 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?DateTimeImmutable $createdAt = null): static
     {
+        if(is_null($createdAt)){
+            $createdAt = new DateTimeImmutable();
+        }
         $this->createdAt = $createdAt;
 
         return $this;
