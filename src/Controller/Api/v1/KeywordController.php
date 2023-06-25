@@ -83,7 +83,7 @@ class KeywordController extends ApiController
     #[OA\Get(summary: "Get available keyword sources", tags: ['Keyword'])]
     #[OA\Response(
         response: 200,
-        description: 'List out available keyword sources',
+        description: 'Lists out available keyword sources',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
