@@ -51,18 +51,6 @@ class KeywordController extends ApiController
             ]
         )
     )]
-    #[OA\Response(
-        response: Response::HTTP_BAD_REQUEST,
-        description: "Bad request",
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(
-                    property: 'data',
-                    example: ['message' => "'%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"]
-                )
-            ]
-        )
-    )]
     public function scoreAction(
         string                   $source,
         string                   $term,
