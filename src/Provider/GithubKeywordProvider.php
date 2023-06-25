@@ -7,22 +7,16 @@ use App\Handler\KeywordScoreHandler;
 use App\Repository\KeywordRepository;
 use Github\Client as GithubClient;
 use Symfony\Component\HttpClient\HttplugClient;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GithubKeywordProvider extends AbstractKeywordProvider
 {
     private GithubClient $githubClient;
 
-    public function __construct(
-        KeywordRepository   $keywordRepository,
-        KeywordScoreHandler $keywordScoreHandler,
-    )
+    public function __construct(KeywordRepository $keywordRepository, KeywordScoreHandler $keywordScoreHandler)
     {
         $this->githubClient = GithubClient::createWithHttpClient(new HttplugClient());
-
-        parent::__construct(
-            $keywordRepository,
-            $keywordScoreHandler
-        );
+        parent::__construct($keywordRepository, $keywordScoreHandler);
     }
 
     public function getSource(): string

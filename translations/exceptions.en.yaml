@@ -1,1 +1,3 @@
-exception.invalid_source: "'%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"
+exception.keyword.source.invalid: "'%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"
+exception.keyword.term.invalid_length: "Length of the 'term' parameter must be between 2 and 255 characters."
+exception.keyword.term.multiple_word: "'term' parameter must be a single word."

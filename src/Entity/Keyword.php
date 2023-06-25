@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: KeywordRepository::class)]
 #[ORM\UniqueConstraint(name: 'keyword__term_source', columns: ['term', 'source'])]
@@ -20,6 +21,7 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(['get_score'])]
+    #[Assert\Length(min: 2, max: 5, groups: ['length'])]
     private ?string $term = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
@@ -152,7 +154,7 @@ class Keyword implements EntityInterface, ApiResponseObjectInterface
 
     public function setCreatedAt(?DateTimeImmutable $createdAt = null): static
     {
-        if(is_null($createdAt)){
+        if (is_null($createdAt)) {
             $createdAt = new DateTimeImmutable();
         }
         $this->createdAt = $createdAt;

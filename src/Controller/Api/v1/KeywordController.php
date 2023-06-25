@@ -5,13 +5,12 @@ namespace App\Controller\Api\v1;
 use App\Controller\Api\ApiController;
 use App\Container\KeywordProviderContainer;
 use App\Entity\Keyword;
+use App\Exception\KeywordException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use OpenApi\Attributes as OA;
 
 #[Route('/keyword', name: 'keyword_')]
@@ -19,6 +18,8 @@ class KeywordController extends ApiController
 {
     /**
      * @throws ContainerExceptionInterface
+     * @throws KeywordException
+     * @throws NotFoundExceptionInterface
      */
     #[Route('/score/{source}/{term}', name: 'score', methods: ['GET'])]
     #[OA\Get(summary: "Get score for the passed keyword(term)", tags: ['Keyword'])]
@@ -52,31 +53,21 @@ class KeywordController extends ApiController
     public function scoreAction(
         string                   $source,
         string                   $term,
-        KeywordProviderContainer $keywordProviderContainer,
-        TranslatorInterface      $translator
+        KeywordProviderContainer $keywordProviderContainer
     ): JsonResponse
     {
-        try {
-            $keywordProvider = $keywordProviderContainer->get($source);
-            $keyword = $keywordProvider->getKeyword($term);
-            $response = $this->getJsonResponse(
-                $keyword,
-                ['groups' => 'get_score']
-            );
 
-        } catch (NotFoundExceptionInterface) {
-
-            $availableSourceOptions = KeywordProviderContainer::getAvailableKeywordProviders(true);
-
-            $message = $translator->trans('exception.invalid_source', [
-                '%source%' => $source,
-                '%valid_sources%' => $availableSourceOptions
-            ], 'exceptions');
-
-            $response = $this->getJsonResponse(['message' => $message], [], Response::HTTP_BAD_REQUEST);
+        if (!in_array($source, KeywordProviderContainer::getAvailableKeywordProviders())) {
+            KeywordException::invalidSource($source,KeywordProviderContainer::getAvailableKeywordProviders());
         }
 
-        return $response;
+        $keywordProvider = $keywordProviderContainer->get($source);
+        $keyword = $keywordProvider->getKeyword($term);
+        return $this->getJsonResponse(
+            $keyword,
+            ['groups' => 'get_score']
+        );
+
     }
 
     #[Route('/sources', name: 'sources', methods: ['GET'])]

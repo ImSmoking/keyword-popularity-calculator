@@ -3,8 +3,10 @@
 namespace App\Provider;
 
 use App\Entity\Keyword;
+use App\Exception\KeywordException;
 use App\Handler\KeywordScoreHandler;
 use App\Repository\KeywordRepository;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class AbstractKeywordProvider implements KeywordProviderInterface
 {
@@ -22,8 +24,18 @@ abstract class AbstractKeywordProvider implements KeywordProviderInterface
         $this->keywordScoreHandler = $keywordScoreHandler;
     }
 
+    /**
+     * @throws KeywordException
+     */
     public function getKeyword(string $term): Keyword
     {
+        if (!$this->isTermLengthValid($term)) {
+            KeywordException::invalidLength();
+        }
+        if (!$this->isTermSingleWord($term)) {
+            KeywordException::multipleWords();
+        }
+
         if (!is_null($keyword = $this->keywordRepository->findOneByTermAndSource($term, $this->getSource()))) {
             $keyword->increaseSearch();
             $this->keywordRepository->save($keyword, true);
@@ -47,5 +59,23 @@ abstract class AbstractKeywordProvider implements KeywordProviderInterface
             ->setHitsNegative($this->getHitsNegative($term))
             ->setCreatedAt()
             ->increaseSearch();
+    }
+
+    private function isTermLengthValid(string $term): bool
+    {
+        if (strlen($term) < 2 || strlen($term) > 255) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isTermSingleWord(string $term): bool
+    {
+        if (str_contains($term, ' ')) {
+            return false;
+        }
+
+        return true;
     }
 }
