@@ -12,7 +12,8 @@
 ### Using Just
 
   The easiest way to set up the project is by using the [Just](https://github.com/casey/just) command runner.
-  Go to the project's root directory and run the `just install` command. This will build up all the needed Docker containers and automatically prepare your local environment.  
+  Go to the project's root directory and run the `just install` command. This will build up all the needed Docker containers and automatically prepare your local environment.    
+  Included `Justfile` has a number of useful commands so make sure to check it out.
 
 ### Manual 
 
@@ -28,4 +29,12 @@
 Now you should be able to access the OpenAPI documentation on http://keyword-popularity.local:8000/api/doc and the
 dockerized version of [Adminer](https://www.adminer.org/) database management tool on http://localhost:8080  
 
+### Running tests
+  Written test are placed in the [test](https://github.com/ImSmoking/keyword-popularity-calculator/tree/master/tests) folder.  
+  Before they can be run the test database needs to be set up which can be done by running commands  
+  `docker-compose exec php bin/console --env=test bin/console doctrine:schema:update --force --complete` and  
+  `docker-compose exec php bin/console --env=test doctrine:database:create --if-not-exists`
+    
+  Once that is done the tests can be run using the `docker-compose exec php composer run-tests` composer script.
+ 
 ## Adding New Keyword Sources
