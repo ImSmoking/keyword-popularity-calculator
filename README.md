@@ -36,5 +36,28 @@ dockerized version of [Adminer](https://www.adminer.org/) database management to
   `docker-compose exec php bin/console --env=test doctrine:database:create --if-not-exists`
     
   Once that is done the tests can be run using the `docker-compose exec php composer run-tests` composer script.
- 
-## Adding New Keyword Sources
+
+
+## Usage
+
+The API has one main endpoint that is used to get the popularity score of the passed word for the give source.    
+**ENDPOINT:** `/api/v1/keyword/score/{source}/{term}`
+  
+**source** (required) - On which source the popularity of the passed **term** should be calculated. Currently the only 
+supported source is **github**, new sources can be added and how to do that is covered in the **Adding New Keyword Source** section.
+  
+**term** (required) - Word whose popularity score on give **source** will be returned. 
+
+### Response 
+**REQUEST**: `/api/v1/keyword/score/github/docker`
+```php
+{
+  "data": {
+    "term": "docker",
+    "score": "7.21",
+    "source": "github",
+    "searched_count": 1
+  }
+}
+```
+### Adding New Keyword Sources
