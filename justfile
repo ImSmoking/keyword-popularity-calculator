@@ -3,7 +3,7 @@ set dotenv-load := true
 
 default:
 	@echo 'Documentation for Symfony Skeleton just commands:'
-	@echo '------------------------------------------------------'
+	@echo '--------------------------------------------------------------------'
 	@echo '  up             : boot up containers'
 	@echo '  down           : stop containers'
 	@echo '  enter-php      : enter PHP docker container'
@@ -11,7 +11,7 @@ default:
 	@echo '  enter-nginx    : enter Nginx docker container'
 	@echo '  install        : install and configure the whole skeleton project'
 	@echo '  teardown       : remove everything and reset to factory settings'
-	@echo '------------------------------------------------------'
+	@echo '--------------------------------------------------------------------'
 
 up:
     docker-compose up -d
@@ -21,21 +21,21 @@ down:
 
 enter-php:
     @echo 'Enter PHP docker container...'
-    docker exec -it ${PROJECT_NAME}_php /bin/bash
+    docker exec -it ${PROJECT}_php /bin/bash
 
 enter-db:
     @echo 'Enter MySql DB docker container...'
-    docker exec -it ${PROJECT_NAME}_db /bin/bash
+    docker exec -it ${PROJECT}_db /bin/bash
 
 enter-nginx:
     @echo 'Enter Nginx docker container...'
-    docker exec -it ${PROJECT_NAME}_nginx /bin/bash
+    docker exec -it ${PROJECT}_nginx /bin/bash
 
 install:
     @echo 'Running the installation script, this might take a minute...'
     cp docker-compose.yaml.dist docker-compose.yaml
     cp .env .env.local
-    docker-compose up --detach --force-recreate --build --remove-orphans
+    docker-compose up --build --detach --force-recreate
     docker-compose exec php /bin/bash /home/appuser/setup.sh
 
 teardown:
