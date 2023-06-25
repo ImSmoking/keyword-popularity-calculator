@@ -10,6 +10,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
 
@@ -39,7 +40,19 @@ class KeywordController extends ApiController
         )
     )]
     #[OA\Response(
-        response: 403,
+        response: Response::HTTP_BAD_REQUEST,
+        description: "Bad request",
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(
+                    property: 'data',
+                    example: ['message' => "'%source%' is not a valid 'source' parameter option! Valid options are %valid_sources%"]
+                )
+            ]
+        )
+    )]
+    #[OA\Response(
+        response: Response::HTTP_BAD_REQUEST,
         description: "Bad request",
         content: new OA\JsonContent(
             properties: [
@@ -62,11 +75,7 @@ class KeywordController extends ApiController
         }
 
         $keywordProvider = $keywordProviderContainer->get($source);
-        $keyword = $keywordProvider->getKeyword($term);
-        return $this->getJsonResponse(
-            $keyword,
-            ['groups' => 'get_score']
-        );
+        return $this->getJsonResponse($keywordProvider->getKeyword($term), ['groups' => 'get_score']);
 
     }
 

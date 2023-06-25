@@ -4,6 +4,7 @@ namespace App\EventListener;
 
 use App\Exception\BaseException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,17 +27,16 @@ class ExceptionListener
 
         $exception = $exceptionEvent->getThrowable();
 
-        $transParameters = [];
         if ($exception instanceof BaseException) {
+            $code = $exception->getCode() === 0 ? Response::HTTP_BAD_REQUEST : $exception->getCode();
             $transParameters = $exception->getData();
+            $data = [
+                'data' => [
+                    'message' => $this->translator->trans($exception->getMessage(), $transParameters, 'exceptions')
+                ]
+            ];
+
+            $exceptionEvent->setResponse(new JsonResponse($data, $code));
         }
-
-        $data = [
-            'data' => [
-                'message' => $this->translator->trans($exception->getMessage(), $transParameters, 'exceptions')
-            ]
-        ];
-
-        $exceptionEvent->setResponse(new JsonResponse($data, $exception->getCode()));
     }
 }
