@@ -88,7 +88,12 @@ class KeywordController extends ApiController
             properties: [
                 new OA\Property(
                     property: 'data',
-                    example: ["source_01", "source_02"]
+                    properties: [
+                        new OA\Property(
+                            property: 'sources',
+                            example: ["source_01", "source_02"]
+                        )
+                    ],
                 )
             ]
         )
@@ -96,6 +101,6 @@ class KeywordController extends ApiController
     public function sourcesAction(): JsonResponse
     {
         $availableSources = KeywordProviderContainer::getAvailableKeywordProviders();
-        return $this->getJsonResponse($availableSources);
+        return $this->getJsonResponse(['sources' => $availableSources]);
     }
 }
