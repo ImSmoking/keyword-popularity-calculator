@@ -66,7 +66,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "run-tests": "vendor/bin/simple-phpunit --testdox"
     },
     "conflict": {
         "symfony/symfony": "*"

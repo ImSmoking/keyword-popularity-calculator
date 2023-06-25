@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Handler;
 
 use App\Entity\Keyword;
 use App\Handler\KeywordScoreHandler;
