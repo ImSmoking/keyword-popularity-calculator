@@ -46,7 +46,7 @@ The API has one main endpoint that is used to get the popularity score of the pa
 **source** (required) - On which source the popularity of the passed **term** should be calculated. Currently the only 
 supported source is **github**, new sources can be added and how to do that is covered in the **Adding New Keyword Source** section.
   
-**term** (required) - Word whose popularity score on give **source** will be returned. 
+**term** (required) - Word whose popularity score on give **source** is calculated and returned.
 
 ### Response 
 **REQUEST**: `/api/v1/keyword/score/github/docker`
@@ -61,3 +61,78 @@ supported source is **github**, new sources can be added and how to do that is c
 }
 ```
 ### Adding New Keyword Sources
+
+1. Create a new keyword provider class and extend to it the `AbstractKeywordProvider.php` class.
+   ```php
+      <?php
+
+        namespace App\Provider;
+   
+        use App\Handler\KeywordScoreHandler;use App\Provider\AbstractKeywordProvider;use App\Repository\KeywordRepository;
+   
+        class NewSourceKeywordProvider extends AbstractKeywordProvider
+        {
+            
+            private NewSourceClient $newSourceClient;
+   
+            public function __construct(
+                KeywordRepository $keywordRepository,
+                KeywordScoreHandler $keywordScoreHandler,
+                NewSourceClient $newSourceClient // example client for the new source.
+            ) {
+   
+                $this->newSourceClient = $newSourceClient;
+   
+                parent::__construct($keywordRepository,$keywordScoreHandler);
+              }
+
+            public function getSource(): string
+            {
+                return 'new_source'
+            }
+
+            public function getHitsPositive(string $term): int
+            {
+                /* @toDO Add logic that will return the total number of positive 
+                  hits for the passed term. */
+   
+                // Example code.
+                return $this->newSourceClient->searchTearm($term.' '.AbstractKeywordProvider::POSITIVE_CONTEXT);
+            }
+
+            public function getHitsNegative(string $term): int
+            {
+                /* @toDO Add logic that will return the total number of negative 
+                   hits for the passed term. */
+   
+                // Example code.
+                return $this->newSourceClient->searchTearm($term.' '.AbstractKeywordProvider::NEGATIVE_CONTEXT);
+            }
+        }
+   ```
+   
+2. Add the newly created keyword provider to the `KeywordProviderContainer.php` mini container.
+   ```php
+      <?php
+        namespace App\Container;
+        ...
+        namespace App\Provider\NewSourceKeywordProvider;
+   
+        class KeywordProviderContainer implements ServiceSubscriberInterface
+        {
+            ...
+            public static function getSubscribedServices(): array
+            {
+                return [
+                    'github' => GithubKeywordProvider::class,
+                    ...
+                    // this line adds the newly created keyword source.
+                    'new_source' => NewSourceKeywordProvider::class
+                ];
+            }
+            ...
+        }
+   ```
+   That is it. Now you should be able to calculate the popularity of a keyword on this newly added source
+   by passing the **new_source** new source identifier as the `source` path parameter in the `/api/v1/keyword/score/{source}/{term}`
+   endpoint.
