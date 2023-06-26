@@ -1,5 +1,17 @@
 # Keyword Popularity API
 
+Symfony based API used to calculate the popularity a keyword on the give source.
+
+Once the popularity of a keyword is calculated that info will be stored in the mysql DB.
+This is done so that next time the same data is requested it can be fetched faster.
+
+#### formula used for calculating the keyword popularity
+`score = (positiv hits / (positiv hits + negativ hits) ) * 10`  
+example for keyword **PHP**  
+positive hist: 4231  
+negative hits: 5988  
+**score: 4.14 = (4231 / (4231+5988)) * 10**
+
 ## Requirements
 
 ## Setup
