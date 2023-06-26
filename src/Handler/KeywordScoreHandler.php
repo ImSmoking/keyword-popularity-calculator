@@ -14,7 +14,7 @@ class KeywordScoreHandler
         if ($hitsTotal === 0) {
             $score = 0;
         } else {
-            // formula: score = (hitsPositive / hitsNegative) * 10
+            // formula: score = (hitsPositive / (hitsPositive + hitsNegative)) * 10
             $score = round($keyword->getHitsPositive() / $hitsTotal, 3) * 10;
         }
 

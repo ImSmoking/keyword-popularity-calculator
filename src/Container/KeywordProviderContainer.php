@@ -2,10 +2,9 @@
 
 namespace App\Container;
 
+use App\Constant\KeywordConstant;
 use App\Provider\AbstractKeywordProvider;
 use App\Provider\GithubKeywordProvider;
-use App\Provider\KeywordProviderInterface;
-use App\Provider\TwitterKeywordProvider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -26,8 +25,8 @@ class KeywordProviderContainer implements ServiceSubscriberInterface
     public static function getSubscribedServices(): array
     {
         return [
-            'github' => GithubKeywordProvider::class,
-            'twitter' => TwitterKeywordProvider::class
+            KeywordConstant::SOURCE_GITHUB => GithubKeywordProvider::class,
+            // KeywordConstant::SOURCE_TWITTER => TwitterKeywordProvider::class
         ];
     }
 
