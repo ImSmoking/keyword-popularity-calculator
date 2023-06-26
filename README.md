@@ -27,6 +27,9 @@ negative hits: 5988
   Go to the project's root directory and run the `just install` command. This will build up all the needed Docker containers and automatically prepare your local environment.    
   Included `Justfile` has a number of useful commands so make sure to check it out.
 
+  **NOTE:** When running the `just install` command for the first time for some reason the symfony commands used to creat the DB and update its schema is not
+  passing and a `exception occurred in the driver: SQLSTATE[HY000] [2002] Connection refused` is thrown. If this happens to you
+  make sure to run the `just install` command one more time.
 ### Manual 
 
   1. Copy the following provided distribution files:  
